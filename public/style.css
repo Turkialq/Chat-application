@@ -25,6 +25,13 @@ body{
     overflow: hidden;
     margin: 0 20px;
 }
+.containertwo{
+    display: flex;
+    align-items: center;
+    height: 440px;
+    width: 200%;
+    transition: height 0.2s ease;
+}
 
 .container .forms{
     display: flex;
@@ -73,7 +80,10 @@ body{
     font-size: 27px;
     font-weight: 600;
 }
-
+.titletwo {
+    position: relative;
+    
+}
 .form .title::before{
     content: '';
     position: absolute;
@@ -216,3 +226,11 @@ body{
       visibility: hidden;
     }
   }
+
+/* Error pages */
+.errormessege{
+    position: absolute;
+    left: 20px;
+    top: 50px;
+    color:aquamarine;
+}

@@ -56,13 +56,17 @@ app.post("/",async(req, res)   =>  {
     userPasswordModel.findOne({email: userEmail}, (error, foundUser) =>{
         if(error) {
             console.log(error);
+        } else if(foundUser == null) {
+            res.sendFile(__dirname+"/public/error.html");
+
         } else {
             bcrypt.compare(userPassword, foundUser.password, function(err, result) {
                 if(result == true) {
                     res.send("User auth is done... implementing next phase(FileShring)");
                     
                 } else {
-                    console.log("Incorrect password..");
+                    res.sendFile(__dirname+"/public/error.html");
+
                 }
             });
         }
