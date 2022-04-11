@@ -1,16 +1,21 @@
 require("dotenv").config();
 const express = require("express");
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
 const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
-const passport = require("passport");
-const localStrategy = require("passport-local");
 const saltRounds = process.env.SALT_ROUNDS;
+
+
 
 
 const Schema = mongoose.Schema;
 const app = express();
 
+//Verifying front-end
 
 app.use(express.static("public"));
 app.use(express.json());
@@ -45,7 +50,7 @@ const userPasswordSchema = new Schema({
 const userPasswordModel = mongoose.model('userPasswordModel', userPasswordSchema);
 
 
-//  Loging routes
+//  Loging routes 
 app.get("/", (req, res) => {
     res.sendFile("/Users/turkialqahtani/Desktop/CSS-info-project/public/login.html" );
 });
@@ -83,22 +88,24 @@ app.post("/signup", async (req, res) => {
     let userEmail = req.body.email;
     let userPassword = req.body.password;
 
-    bcrypt.hash(userPassword, saltRounds, (error, result) => {
+    bcrypt.hash(req.body.password,10, function(err, hash){
         const dbData = new userPasswordModel({
             email: userEmail,
-            password: result,
+            password: hash,
             name: userName
         });
-        dbData.save()
-        .then(result => {
-        res.redirect("/");
-        })
-        .catch(error => {
-        console.log(error);
+        dbData.save(err => {
+            if(err) {
+                console.log(err);
+            } else {
+                res.redirect("/");
+            }
+
         });
     });
-
 });
+
+
 
 
 

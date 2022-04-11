@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Sharing</title>
+    <link rel="stylesheet" href="filesharing.css">
+</head>
+<body>
+    <div class="app">
+        <div class="screen join-screen active">
+            <div class="form">
+                <h3>Share your files</h3>
+                <div class="form-input">
+                    <button id="sender -start -con -btn" name="filebutton">Create a room</button>
+                </div> 
+                <div class="form-input" id="join-id">
+                    <b>Room id</b>
+                    <span>000-000-000</span>
+                </div>
+            </div>
+        </div>
+        <div class="screen fs-screen">
+            <div class="file-input">
+                <label for="file-input">
+                    Click here to slete files
+                    <input type="file" name="" id="file-input">
+                </label>
+                <div class="files-list">
+                    <div class="title"> Shared files:</div>
+                    <div class="item">
+                        <div class="progress">0%</div>
+                        <div class="filename"> Abc.text</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/code.js"></script>
+    <script>
+        var socket = io();
+        
+    </script>
+</body>
+</html>
