@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const http = require('http');
+const app = express();
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
@@ -13,7 +14,7 @@ const saltRounds = process.env.SALT_ROUNDS;
 
 
 const Schema = mongoose.Schema;
-const app = express();
+
 
 //Verifying front-end
 
