@@ -12,7 +12,6 @@ const saltRounds = process.env.SALT_ROUNDS;
 
 
 
-
 const Schema = mongoose.Schema;
 
 
@@ -26,7 +25,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 mongoose.connect('mongodb+srv://Turki:Taylorswift12@cluster0.ptkvk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
 ).then(() => {
-    app.listen(process.env.PORT || 3000, () => {
+    server.listen(process.env.PORT || 3000, () => {
         console.log("Server is up on port 3000");
     });
 }).catch(err => {
@@ -68,8 +67,14 @@ app.post("/",async(req, res)   =>  {
         } else {
             bcrypt.compare(userPassword, foundUser.password, function(err, result) {
                 if(result == true) {
-                    res.send("User auth is done... implementing next phase(FileShring)");
-                    
+                    let name = req.body.select;
+                    console.log(name);
+                    if (name === "sender") {
+                        res.redirect("/sender");
+                    }
+                    if(name === "receiver") {
+                        res.redirect("/receiver");
+                    }                    
                 } else {
                     res.sendFile(__dirname+"/public/error.html");
 
@@ -78,6 +83,8 @@ app.post("/",async(req, res)   =>  {
         }
     });
 });
+
+
 
 app.get("/signup", (req, res) => {
     res.sendFile("/Users/turkialqahtani/Desktop/CSS-info-project/public/signup.html");
@@ -105,8 +112,34 @@ app.post("/signup", async (req, res) => {
         });
     });
 });
+app.get("/sender", (req,res) => {
+	res.sendFile(__dirname+ "/public/sender.html");
+});
 
+app.get("/receiver", (req, res) => {
+	res.sendFile(__dirname + "/public/receiver.html");
+});
 
+// Sockets and Filesharing
+
+io.on("connection", function(socket){
+	socket.on("sender-join",function(data){
+		socket.join(data.uid);
+	});
+	socket.on("receiver-join",function(data){
+		socket.join(data.uid);
+		socket.in(data.sender_uid).emit("init", data.uid);
+	});
+	socket.on("file-meta",function(data){
+		socket.in(data.uid).emit("fs-meta", data.metadata);
+	});
+	socket.on("fs-start",function(data){
+		socket.in(data.uid).emit("fs-share", {});
+	});
+	socket.on("file-raw",function(data){
+		socket.in(data.uid).emit("fs-share", data.buffer);
+	})
+});
 
 
 
