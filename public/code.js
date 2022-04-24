@@ -1,27 +1,33 @@
+//-1 enc/dec using AES --> done
+// do public key encry/dec --> not done yet!
+
 let receiverID;
 const socket = io();
 
+// Generate room id 
 function generateID(){
 	return `${Math.trunc(Math.random()*999)}-${Math.trunc(Math.random()*999)}-${Math.trunc(Math.random()*999)}`;
 }
-
+// sends encrypted room id to the server
 document.querySelector("#sender-start-con-btn").addEventListener("click",function(){
 	let joinID = generateID();
 	document.querySelector("#join-id").innerHTML = `
 		<b>Room ID</b>
 		<span>${joinID}</span>
 	`;
+	let enJoinID = CryptoJS.AES.encrypt(joinID,'123').toString();
 	socket.emit("sender-join", {
-		uid:joinID
+		uid:enJoinID
 	});
 });
-
+// after sending it change the screens
 socket.on("init",function(uid){
 	receiverID = uid;
 	document.querySelector(".join-screen").classList.remove("active");
 	document.querySelector(".fs-screen").classList.add("active");
 });
 
+// breaking the file in chunks
 document.querySelector("#file-input").addEventListener("change",function(e){
 	let file = e.target.files[0];
 	if(!file){
@@ -38,6 +44,7 @@ document.querySelector("#file-input").addEventListener("change",function(e){
 				<div class="filename">${file.name}</div>
 		`;
 		document.querySelector(".files-list").appendChild(el);
+		
 		shareFile({
 			filename: file.name,
 			total_buffer_size:buffer.length,
@@ -46,7 +53,6 @@ document.querySelector("#file-input").addEventListener("change",function(e){
 	}
 	reader.readAsArrayBuffer(file);
 });
-
 function shareFile(metadata,buffer,progress_node){
 	socket.emit("file-meta", {
 		uid:receiverID,

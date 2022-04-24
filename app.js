@@ -8,6 +8,7 @@ const io = new Server(server);
 const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
+const cryptoJS = require('crypto-js');
 const saltRounds = process.env.SALT_ROUNDS;
 
 
@@ -120,11 +121,12 @@ app.get("/receiver", (req, res) => {
 	res.sendFile(__dirname + "/public/receiver.html");
 });
 
-// Sockets and Filesharing
+// Sockets and Filesharing and Decryption the data in the server side.
 
 io.on("connection", function(socket){
 	socket.on("sender-join",function(data){
-		socket.join(data.uid);
+        let decUID = cryptoJS.AES.decrypt(data.uid,'123').toString(cryptoJS.enc.Utf8);
+		socket.join(decUID);
 	});
 	socket.on("receiver-join",function(data){
 		socket.join(data.uid);

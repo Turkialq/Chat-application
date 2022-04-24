@@ -21,7 +21,6 @@ document.querySelector("#receiver-start-con-btn").addEventListener("click",funct
 
 
 let fileShare = {};
-
 socket.on("fs-meta",function(metadata){
 	fileShare.metadata = metadata;
 	fileShare.transmitted = 0;
