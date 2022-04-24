@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const cryptoJS = require('crypto-js');
-const saltRounds = process.env.SALT_ROUNDS;
+//const saltRounds = process.env.SALT_ROUNDS;
 
 
 
@@ -125,7 +125,9 @@ app.get("/receiver", (req, res) => {
 
 io.on("connection", function(socket){
 	socket.on("sender-join",function(data){
-        let decUID = cryptoJS.AES.decrypt(data.uid,'123').toString(cryptoJS.enc.Utf8);
+        // chages decrypt the outerlayer(public) -> then inner layer(aes)
+          decrypttionWithPrivateKey(privateKey, data.buffer);
+          decUID = cryptoJS.AES.decrypt(data.uid,'123').toString(cryptoJS.enc.Utf8);
 		socket.join(decUID);
 	});
 	socket.on("receiver-join",function(data){
@@ -144,4 +146,33 @@ io.on("connection", function(socket){
 });
 
 
+// decryption using private key
+
+function decrypttionWithPrivateKey(privateKey, data){
+    const textToChars = text => text.split('').map(c => c.charCodeAt(0));
+    const applySaltToChar = code => textToChars(privateKey).reduce((a,b) => a ^ b, code);
+    return encoded => encoded.match(/.{1,2}/g)
+      .map(hex => parseInt(hex, 16))
+      .map(applySaltToChar)
+      .map(charCode => String.fromCharCode(charCode))
+      .join('');
+     
+}
+
+
+const privateKey =` -----BEGIN RSA PRIVATE KEY-----
+ MIICXAIBAAKBgQC5dF1rwfRwDrvv+4NYxHI25a4Nuyh2VWUUzCZDyUMA4DGCY7cu
+ w30eeEZ11hrTkZU6S6tcXC53mTkihUP0fZEZj6AtfQgjQpzS9DTeXnvHJ3fUngce
+ /ZP0aZSSTFsAWhRAyKtM8Uo0O4D3r9xfLT9jdaye4Y+sROUXQgAluqo+8QIDAQAB
+ AoGBALRZgoRJgSH8Yi32JPyNRhk28TXvPWEemIdKJSgksGFIpT0NJdZ3S9T22Ga9
+ ySbYXAvuDH5sMtAiFNsKSFSaTCCr+I0tgDJ9q5o1ZOXCwPWgiaTuzjYu7+ISfVPh
+ 43Do4GIje17KgaC0r9/q8SlWPRz1Kxgpi8RfZzfmBPOHMdOFAkEA5t2x/myhaLXC
+ 4mEYSiKO4krwntzi6F5VvPbXnwq/foF1UWB6+zr/opeXZrnuWiFKMrhuIEvqlzKN
+ PyMbI8WCIwJBAM2lCfoNjhhEMh+sLhETc4LpbWJUgdEyjAXiCF0/BKxhHY+ephc0
+ ORlNCZe9/hepZy51zUX6hwJR8WKwFGCvmdsCQC7cu3+wn0b49jkrilmqECThH1yv
+ 66NNWswDsxsGfH56Ws0M74nFnRRs/v+MKFTFQyFujHQj1NeiHEe/oYeuVM8CQCFA
+ b3WMXY6U8FnouGYwc/wWDIbazUbrWnLVEq8pMnNBHMuNRqP34MezijqMERr4XGPJ
+ zpBjKxN39oUTnafonQMCQAMwxHB2u6sPIomAHRpcVLNRmNP7TIftA50mQhRHDtoB
+ DsQQw/zEk5i/CGnqq1Y3f98inhE52hg4GKcoSKGNx94=
+ -----END RSA PRIVATE KEY-----`
 

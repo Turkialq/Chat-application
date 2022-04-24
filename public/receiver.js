@@ -1,4 +1,6 @@
+// changes bundle this file
 const socket = io();
+const crypto = require('crypto');
 let sender_uid;
 
 function generateID(){
