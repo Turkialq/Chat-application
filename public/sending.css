@@ -4,8 +4,9 @@
 	box-sizing: border-box;
 }
 body {
-	background: #f5f5f5;
-	font-family: "Roboto",sans-serif;
+	background:  #006778;
+	font-family: "Roboto",sans-serif; 
+	/* // change to white if all goes wrong// */
 }
 .screen {
 	display: none;
@@ -24,23 +25,48 @@ body {
 	margin: 10px 0px;
 }
 .join-screen .form h2 {
+	color: #DFDFDE;
 	font-size: 40px;
 	margin-bottom: 20px;
 	line-height:45px;
 	font-family: "Montserrat",sans-serif;
 }
 .join-screen .form button {
-	background: #111;
-	color: #fff;
-	padding: 10px 20px;
-	border: none;
-	outline: none;
+	background: #0093AB;
+	color: #DFDFDE;
+	border-radius: 5px;
+	border-style: none;
+	box-shadow: rgba(245, 244, 247, .25) 0 1px 1px inset;
+	cursor: pointer;
+	display: inline-block;
+	font-family: Inter, sans-serif;
 	font-size: 16px;
-	font-weight: 600;
-	border-radius: 20px;
+	font-weight: 500;
+	height: 60px;
+	line-height: 60px;
+	margin-left: -4px;
+	outline: 0;
+	text-align: center;
+	transition: all .3s cubic-bezier(.05, .03, .35, 1);
+	user-select: none;
+	-webkit-user-select: none;
+	touch-action: manipulation;
+	vertical-align: bottom;
+	width: 190px;
 }
+.button :hover {
+	opacity: .7;
+  }
+  @media screen and (max-width: 1000px) {
+	.join-screen .form button {
+	  font-size: 14px;
+	  height: 55px;
+	  line-height: 55px;
+	  width: 150px;
+	}
+  }
 .join-screen .form #join-id b {
-	color: #222;
+	color: #DFDFDE;
 	display: block;
 	margin-top: 20px;
 }
@@ -48,13 +74,15 @@ body {
 	display: inline-block;
 	font-size: 25px;
 	font-family: monospace;
-	color: #111;
+	color: black;
 	padding: 10px;
 	border: 1px solid #111;
 	margin-top: 5px;
+	border-radius: 5px;
+	background-color: white;
 }
 .join-screen .form .form-input label {
-	color: #222;
+	color: #DFDFDE;
 	font-size: 18px;
 }
 .join-screen .form .form-input input {
@@ -66,6 +94,7 @@ body {
 	color: #111;
 	font-size: 20px;
 	padding: 10px;
+	border-radius: 4px;
 }
 
 .fs-screen {
@@ -73,14 +102,15 @@ body {
 }
 .fs-screen .file-input {
 	width: 100%;
-	border: 2px dashed #555;
+	border: 2px solid #DFDFDE;
+	border-radius: 4px;;
 }
 .fs-screen .file-input label {
 	display: block;
 	width: 100%;
 	padding: 40px 50px;
 	text-align: center;
-	color: #111;
+	color:#DFDFDE;
 	font-size: 18px;
 }
 .fs-screen .file-input input {
@@ -94,23 +124,25 @@ body {
 	flex-wrap: wrap;
 }
 .fs-screen .files-list .title {
+	color:#DFDFDE;
 	width: 100%;
 	margin: 20px 0px;
 }
 .fs-screen .files-list .item {
 	width: 33%;
 	min-width: 200px;
-	border: 1px solid #eee;
+	border: 1px solid #DFDFDE;
+	border-radius: 4px;
 	box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.05);
 }
 .fs-screen .files-list .item .progress {
 	padding: 30px;
 	text-align: center;
 	font-size: 50px;
-	color: #222;
-	font-family: "Montserrat";
+	color: #DFDFDE;
 }
 .fs-screen .files-list .item .filename {
+	color: #DFDFDE;
 	padding: 5px;
 	font-size: 18px;
 	border-top: 1px solid #eee;

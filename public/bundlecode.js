@@ -16,7 +16,8 @@ document.querySelector("#sender-start-con-btn").addEventListener("click",functio
 		<b>Room ID</b>
 		<span>${joinID}</span>
 	`;
-	let enJoinID = CryptoJS.AES.encrypt(joinID,'123').toString();
+  const sharedKey = 'DgMYJjty7mm8272';
+	let enJoinID = CryptoJS.AES.encrypt(joinID,sharedKey).toString();
 	socket.emit("sender-join", {
 		uid:enJoinID
 	});

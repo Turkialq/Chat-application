@@ -9,7 +9,6 @@ const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const cryptoJS = require('crypto-js');
-//const saltRounds = process.env.SALT_ROUNDS;
 
 
 
@@ -85,8 +84,6 @@ app.post("/",async(req, res)   =>  {
     });
 });
 
-
-
 app.get("/signup", (req, res) => {
     res.sendFile("/Users/turkialqahtani/Desktop/CSS-info-project/public/signup.html");
 });
@@ -127,7 +124,7 @@ io.on("connection", function(socket){
 	socket.on("sender-join",function(data){
         // chages decrypt the outerlayer(public) -> then inner layer(aes)
           decrypttionWithPrivateKey(privateKey, data.buffer);
-          decUID = cryptoJS.AES.decrypt(data.uid,'123').toString(cryptoJS.enc.Utf8);
+          decUID = cryptoJS.AES.decrypt(data.uid,sharedKey).toString(cryptoJS.enc.Utf8);
 		socket.join(decUID);
 	});
 	socket.on("receiver-join",function(data){
@@ -155,7 +152,7 @@ function decrypttionWithPrivateKey(privateKey, data){
       .map(hex => parseInt(hex, 16))
       .map(applySaltToChar)
       .map(charCode => String.fromCharCode(charCode))
-      .join('');
+      .join(data);
      
 }
 
@@ -175,4 +172,6 @@ const privateKey =` -----BEGIN RSA PRIVATE KEY-----
  zpBjKxN39oUTnafonQMCQAMwxHB2u6sPIomAHRpcVLNRmNP7TIftA50mQhRHDtoB
  DsQQw/zEk5i/CGnqq1Y3f98inhE52hg4GKcoSKGNx94=
  -----END RSA PRIVATE KEY-----`
+
+ const sharedKey = 'DgMYJjty7mm8272';
 

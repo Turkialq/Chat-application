@@ -4,6 +4,7 @@ const socket = io();
 const crypto = require('crypto');
 
 
+
 // Generate room id 
 function generateID(){
 	return `${Math.trunc(Math.random()*999)}-${Math.trunc(Math.random()*999)}-${Math.trunc(Math.random()*999)}`;
@@ -15,7 +16,7 @@ document.querySelector("#sender-start-con-btn").addEventListener("click",functio
 		<b>Room ID</b>
 		<span>${joinID}</span>
 	`;// changes here
-	 let enJoinID = CryptoJS.AES.encrypt(joinID,'123').toString();
+	 let enJoinID = CryptoJS.AES.encrypt(joinID,sharedKey).toString();
 	socket.emit("sender-join", {
 		uid:enJoinID,
 		datameta:encryptionWithPublicKey(publicKey, joinID)
@@ -93,3 +94,5 @@ MIGJAoGBALl0XWvB9HAOu+/7g1jEcjblrg27KHZVZRTMJkPJQwDgMYJjty7DfR54
 RnXWGtORlTpLq1xcLneZOSKFQ/R9kRmPoC19CCNCnNL0NN5ee8cnd9SeBx79k/Rp
 lJJMWwBaFEDIq0zxSjQ7gPev3F8tP2N1rJ7hj6xE5RdCACW6qj7xAgMBAAE=
 -----END RSA PUBLIC KEY-----`
+
+const sharedKey = 'DgMYJjty7mm8272';
