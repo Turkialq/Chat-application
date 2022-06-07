@@ -1,4 +1,5 @@
 require("dotenv").config();
+
 const express = require("express");
 const http = require('http');
 const app = express();
@@ -9,17 +10,29 @@ const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const cryptoJS = require('crypto-js');
+const session = require('express-session');
+const passport = require('passport');
+const passportLocalMongoose = require('passport-local-mongoose');
+
 
 
 
 const Schema = mongoose.Schema;
 
 
-//Verifying front-end
+//Verifying front-end + making session for cookies
 
 app.use(express.static("public"));
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended:true}));
+app.use(session({
+    secret: 'secrent.',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {secure:true}
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 //Database setup
 
@@ -32,7 +45,7 @@ mongoose.connect('mongodb+srv://Turki:Taylorswift12@cluster0.ptkvk.mongodb.net/m
     console.log("Database Failed To Connect"+err);
 });
 
-const userPasswordSchema = new Schema({
+const userPasswordSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true
@@ -47,7 +60,16 @@ const userPasswordSchema = new Schema({
     }
 }, {timestamps: true});
 
+userPasswordSchema.plugin(passportLocalMongoose);
+
 const userPasswordModel = mongoose.model('userPasswordModel', userPasswordSchema);
+
+passport.use(userPasswordModel.createStrategy());
+
+passport.serializeUser(userPasswordModel.serializeUser());
+passport.deserializeUser(userPasswordModel.deserializeUser());
+
+
 
 
 //  Loging routes 
